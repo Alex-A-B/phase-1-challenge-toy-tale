@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
   - append to div id="toy-collection"
 */  
   const cardBuilder = (toyInfo) => {
-    console.log(toyInfo);
   const cardCollection = document.getElementById("toy-collection");
 
   const createCard = document.createElement("div");
@@ -64,14 +63,12 @@ document.addEventListener("DOMContentLoaded", () => {
   ** GET cards **
   - Fetch() method GET
   - will be required to update page at new card submit and like clicked as well
-
-  , config = {"Content-Type": "application/json"}
 */
+
   const cardGetter = (url="http://localhost:3000/toys") => {
     fetch(url, {
       method: "GET",
-      // headers: config,
-    })
+     })
       .then(function(response) {
         return response.json();
       })
@@ -92,6 +89,48 @@ document.addEventListener("DOMContentLoaded", () => {
   - some form of card capture - taking form input into JSON.stringify body text
   - run GET request function
 */
+// const newToyName = document.querySelector("name");
+// const newToyImg = document.querySelector("image");
+
+
+const userCreatesCard = () => {
+  const newToyName = document.querySelector(".input.input-text input[name='name']");
+  const newToyImg = document.querySelector(".input.input-text input[name='image']");
+  fetch("http://localhost:3000/toys", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({
+      "name": newToyName.value,
+      "image": newToyImg.value,
+      "likes": 0
+    })
+  })
+    .then(function(response) {
+        console.log(response.json())
+        return response.json();
+      
+    })
+    .then(function(toyData) {
+        console.log(toyData)
+        toyData.map( toys => cardBuilder(toys));
+    })
+    .catch(function(error) {
+      console.log(error.message)
+    })
+};
+
+const toySubmit = document.querySelector(".submit");
+
+toySubmit.addEventListener("submit", (event) => {
+  event.preventDefault();
+  userCreatesCard();
+});
+
+
+
 
 /* 
   Function to create like button which increases #likes 
