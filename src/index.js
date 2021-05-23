@@ -1,6 +1,7 @@
 let addToy = false;
 
 document.addEventListener("DOMContentLoaded", () => {
+  cardGetter();
   const addBtn = document.querySelector("#new-toy-btn");
   const toyFormContainer = document.querySelector(".container");
   addBtn.addEventListener("click", () => {
@@ -30,38 +31,59 @@ document.addEventListener("DOMContentLoaded", () => {
       - <button> = class"like-btn" id="[toy_id]">like
   - append to div id="toy-collection"
 */  
-  const cardBuilder = () => {
-  const cardCollection = document.getElementById("toy-collection")
+  const cardBuilder = (toyInfo) => {
+    console.log(toyInfo);
+  const cardCollection = document.getElementById("toy-collection");
 
   const createCard = document.createElement("div");
   createCard.className = "card";
   
   const cardHeader = document.createElement("h2");
-  cardHeader.innerText = `[name.json]`
+  cardHeader.innerText = toyInfo.name
   createCard.appendChild(cardHeader);
 
   const cardImage = document.createElement("img");
   cardImage.className = "toy-avatar";
-  cardImage.src = `[image.json]`;
+  cardImage.src = toyInfo.image;
   createCard.appendChild(cardImage);
 
   const cardPara = document.createElement("p");
-  cardPara.innerText = `[likes.json] likes!`;
+  cardPara.innerText = toyInfo.likes + " likes!";
   createCard.appendChild(cardPara);
 
   const cardButton = document.createElement("button");
   cardButton.innerText = "♥ Like ♥";
-  cardButton.id = `[id.json]`;
+  cardButton.id = toyInfo.id;
   cardButton.class = "like-btn";
   createCard.appendChild(cardButton);
 
   cardCollection.appendChild(createCard);
   };
+
   /*
   ** GET cards **
   - Fetch() method GET
   - will be required to update page at new card submit and like clicked as well
+
+  , config = {"Content-Type": "application/json"}
 */
+  const cardGetter = (url="http://localhost:3000/toys") => {
+    fetch(url, {
+      method: "GET",
+      // headers: config,
+    })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(toyData) {
+        toyData.map( toys => cardBuilder(toys));
+      })
+      .catch(function(error) {
+        console.log(error.message)
+      })
+    };
+  
+
 
 /* 
   Function that creates toy card via submit 
