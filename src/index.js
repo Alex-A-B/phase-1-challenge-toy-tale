@@ -13,3 +13,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+
+/* on load, GET toy objects.
+  - createElement <div class="card"> 
+  - card elements are:
+      - <h2> = toy name - no class req
+      - <img> = src="toyimgURL" class="toy-avatar"
+      - <p> = "# Likes"
+      - <button> = class"like-btn" id="[toy_id}">like
+
+/* create toy card via submit */
+
+/* create like button which increases #likes */
