@@ -55,6 +55,10 @@ document.addEventListener("DOMContentLoaded", () => {
   cardButton.innerText = "♥ Like ♥";
   cardButton.id = toyInfo.id;
   cardButton.className = "like-btn";
+  cardButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    likes(e);
+    });
   createCard.appendChild(cardButton);
 
   cardCollection.appendChild(createCard);
@@ -128,18 +132,28 @@ toySubmit.addEventListener("submit", (event) => {
 
 /* 
   Function to create like button which increases #likes 
-  - apply eventListener via a [for (const eachLikeButton of LikeButtons) {} ]
+  - apply eventListener via a [for (const eachLikeButton of LikeButtons) {} ]?
+      ***** added it in the cardBuilder function as that iterates over each card from the db.json.
   - Click event which will send a PATCH request to ID# update the likes number "++likesNumber"
   - update via sending GET request (may be memory hungry so this.ID or something? or YOLO no optimisation)
 */
 
-const likeBtn = document.querySelectorAll(".like-btn");
-
-for (const like of likeBtn) {
-  like.addEventListener("click", () => {
-    console.log("someone clicked like")
+const likes = (e) => {
+  let newNum = parseInt(e.target.previousSibling.innerText) + 1
+  fetch(`http://localhost:3000/toys/${e.target.id}`, {
+    method: "PATCH",
+    headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+    }, 
+    body: JSON.stringify({
+    "likes": newNum
+    })
+  })
+  .then(function(response) {
+    return response.json()
+  })
+  .catch(function(error) {
+    console.log(error.message)
   })
 };
-
-
-
