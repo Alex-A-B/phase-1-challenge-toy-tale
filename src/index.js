@@ -2,7 +2,6 @@ let addToy = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   cardGetter();
-  console.log("DOM just loaded")
   const addBtn = document.querySelector("#new-toy-btn");
   const toyFormContainer = document.querySelector(".container");
   addBtn.addEventListener("click", () => {
@@ -78,7 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return response.json();
       })
       .then(function(toyData) {
-        console.log("building Cards for you")
         toyData.map( toys => cardBuilder(toys));
       })
       .catch(function(error) {
@@ -121,7 +119,7 @@ const userCreatesToy = () => {
 const toySubmit = document.querySelector(".add-toy-form");
 
 toySubmit.addEventListener("submit", (event) => {
-  // event.preventDefault(); // doesn't appear to be preventing default as the page is refreshing.
+  event.preventDefault(); // doesn't appear to be preventing default as the page is refreshing.
   userCreatesToy();
   // cardGetter();  <-- don't need to run twice I guess... 
   // console.log("I am listening") <-- used to make sure query selector was finding right element.
@@ -134,8 +132,11 @@ toySubmit.addEventListener("submit", (event) => {
   Function to create like button which increases #likes 
   - apply eventListener via a [for (const eachLikeButton of LikeButtons) {} ]?
       ***** added it in the cardBuilder function as that iterates over each card from the db.json.
-  - Click event which will send a PATCH request to ID# update the likes number "++likesNumber"
+  - Click event which will send a PATCH request to ID# update the likes number "++likesNumber"?
+      ***** used target(button) .previousSibling to get the like number then increment with + 1 
+      ***** used parseInt to create number to add to.
   - update via sending GET request (may be memory hungry so this.ID or something? or YOLO no optimisation)
+      ***** as it refreshes it auto gets increase liked number request, preventDefault() does nothing cap'n.
 */
 
 const likes = (e) => {
