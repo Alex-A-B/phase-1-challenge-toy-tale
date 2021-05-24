@@ -2,6 +2,7 @@ let addToy = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   cardGetter();
+  console.log("DOM just loaded")
   const addBtn = document.querySelector("#new-toy-btn");
   const toyFormContainer = document.querySelector(".container");
   addBtn.addEventListener("click", () => {
@@ -53,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cardButton = document.createElement("button");
   cardButton.innerText = "♥ Like ♥";
   cardButton.id = toyInfo.id;
-  cardButton.class = "like-btn";
+  cardButton.className = "like-btn";
   createCard.appendChild(cardButton);
 
   cardCollection.appendChild(createCard);
@@ -73,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return response.json();
       })
       .then(function(toyData) {
+        console.log("building Cards for you")
         toyData.map( toys => cardBuilder(toys));
       })
       .catch(function(error) {
@@ -89,13 +91,10 @@ document.addEventListener("DOMContentLoaded", () => {
   - some form of card capture - taking form input into JSON.stringify body text
   - run GET request function
 */
-// const newToyName = document.querySelector("name");
-// const newToyImg = document.querySelector("image");
 
-
-const userCreatesCard = () => {
-  const newToyName = document.querySelector(".input.input-text input[name='name']");
-  const newToyImg = document.querySelector(".input.input-text input[name='image']");
+const userCreatesToy = () => {
+  const newToyName = document.querySelector(".add-toy-form input[name='name']");
+  const newToyImg = document.querySelector(".add-toy-form input[name='image']");
   fetch("http://localhost:3000/toys", {
     method: "POST",
     headers: {
@@ -108,25 +107,20 @@ const userCreatesCard = () => {
       "likes": 0
     })
   })
-    .then(function(response) {
-        console.log(response.json())
-        return response.json();
-      
-    })
-    .then(function(toyData) {
-        console.log(toyData)
-        toyData.map( toys => cardBuilder(toys));
-    })
     .catch(function(error) {
       console.log(error.message)
     })
 };
 
-const toySubmit = document.querySelector(".submit");
+// USERCREATESTOY - removed response elements as doesn't seem to require them as page is reloading.
+
+const toySubmit = document.querySelector(".add-toy-form");
 
 toySubmit.addEventListener("submit", (event) => {
-  event.preventDefault();
-  userCreatesCard();
+  // event.preventDefault(); // doesn't appear to be preventing default as the page is refreshing.
+  userCreatesToy();
+  // cardGetter();  <-- don't need to run twice I guess... 
+  // console.log("I am listening") <-- used to make sure query selector was finding right element.
 });
 
 
@@ -138,3 +132,14 @@ toySubmit.addEventListener("submit", (event) => {
   - Click event which will send a PATCH request to ID# update the likes number "++likesNumber"
   - update via sending GET request (may be memory hungry so this.ID or something? or YOLO no optimisation)
 */
+
+const likeBtn = document.querySelectorAll(".like-btn");
+
+for (const like of likeBtn) {
+  like.addEventListener("click", () => {
+    console.log("someone clicked like")
+  })
+};
+
+
+
